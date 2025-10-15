@@ -41,6 +41,17 @@ public class GlobalExceptionHandler {
     }
 
     /**
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ErrorDetails> handleDuplicateResourceException(DuplicateResourceException exception,
+                                                               WebRequest webRequest) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+                webRequest.getDescription(false));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+    */
+
+    /**
      * global exceptions
      * @param exception
      * @param webRequest

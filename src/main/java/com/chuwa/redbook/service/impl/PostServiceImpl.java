@@ -2,6 +2,7 @@ package com.chuwa.redbook.service.impl;
 
 import com.chuwa.redbook.dao.PostRepository;
 import com.chuwa.redbook.entity.Post;
+import com.chuwa.redbook.exception.DuplicateResourceException;
 import com.chuwa.redbook.exception.ResourceNotFoundException;
 import com.chuwa.redbook.payload.PostDto;
 import com.chuwa.redbook.payload.PostResponse;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +37,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto createPost(PostDto postDto) {
 
+        if (postRepository.existsByTitle(postDto.getTitle())) {
+            throw new DuplicateResourceException(HttpStatus.CONFLICT, "Post title already exists");
+        }
         // covert DTO to Entity
 //        Post post = mapToEntity(postDto);
         Post post = modelMapper.map(postDto, Post.class);
